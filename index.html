@@ -1,16 +1,73 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
-  <title>replit</title>
-  <link href="style.css" rel="stylesheet" type="text/css" />
+   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>Login - MindFlow</title>
+  <link rel="stylesheet" href="login.css">
 </head>
-
 <body>
-  Hello world
-  <script src="script.js"></script>
-</body>
+  <div class="container">
+    <h2>Login</h2>
 
+    <!-- Seleção de tipo -->
+    <label for="tipo">Você é:</label>
+    <select id="tipo" onchange="mostrarCampos()">
+      <option value="">Selecione...</option>
+      <option value="paciente">Paciente</option>
+      <option value="profissional">Profissional</option>
+    </select>
+
+    <!-- Campos de Paciente -->
+    <div id="paciente" class="hidden">
+      <input type="text" id="usuario" placeholder="Login (ex: joao)">
+      <input type="password" id="senha" placeholder="Senha">
+    <button onclick="window.location.href='paginaPaciente.html'">Avançar</button>
+   </div>
+
+   <!-- Campos de Profissional -->
+    <div id="profissional" class="hidden">
+      <input type="text" id="nomeProf" placeholder="Nome">
+      <input type="text" id="sobrenomeProf" placeholder="Sobrenome">
+      <input type="text" id="crmProf" placeholder="CRM (ex: 123456/SP)">
+      <input type="email" id="emailProf" placeholder="Gmail">
+      <button onclick="fazerLogin('profissional')">Entrar</button>
+    </div>
+  </div>
+        <script>
+          function mostrarCampos() {
+            const tipo = document.getElementById("tipo").value;
+            document.getElementById("paciente").classList.add("hidden");
+            document.getElementById("profissional").classList.add("hidden");
+
+            if (tipo) {
+              document.getElementById(tipo).classList.remove("hidden");
+            }
+          }
+
+          function fazerLogin(tipo) {
+            if (tipo === "paciente") {
+              const usuario = document.getElementById("usuario").value;
+              const senha = document.getElementById("senha").value;
+
+              if (usuario === "joao" && senha === "1234") {
+                sessionStorage.setItem("usuario", usuario);
+                window.location.href = "paginaPaciente.html";
+              } else {
+                alert("Usuário ou senha inválidos!");
+              }
+            }
+
+            if (tipo === "profissional") {
+              const crm = document.getElementById("crmProf").value;
+              if (crm) {
+                sessionStorage.setItem("crm", crm);
+                window.location.href = "profissional.html";
+              } else {
+                alert("Por favor, insira seu CRM.");
+              }
+            }
+          }
+        </script>
+  </body>
 </html>

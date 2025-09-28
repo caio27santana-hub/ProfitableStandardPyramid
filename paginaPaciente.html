@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site com Menu Fixo</title>
+    <!-- Aqui é importante o id="tema-css" -->
+    <link id="tema-css" rel="stylesheet" href="claro.css">
+    <script src="scripts.js" defer></script>
+  
+    
+</head>
+
+<body>
+    <div class="container">
+        <nav class="menu-lateral">
+            <h2>
+              <a href="paginaPaciente.html"> <!-- ou a página que você quiser -->
+                <img id="logo" src="mindflow_logo_transparente.png" alt="MindFlow" />
+              </a>
+            </h2>
+            <ul>
+                <li><a href="sos.html">S.O.S.</a></li>
+                <li><a href="calendario.html">Calendário</a></li>
+                <li><a href="diariopessoal.html">Diario Pessoal</a></li>
+            </ul>
+
+            <button id="botao-tema" class="botao-tema" title="Alternar Tema">
+                🌙 Modo Escuro
+            </button>
+        </nav>
+        <!-- Conteúdo principal -->
+        <div class="layout">
+            <main class="conteudo">
+                <div class="secao-nos-conheca">
+                    <div class="texto">
+                        <h2>Nos Conheça</h2>
+                        <p>
+                            Somos uma equipe de estudantes que criou este site como parte de um projeto acadêmico.
+                            Nosso objetivo é ajudar as pessoas, oferecendo suporte e soluções para diversas questões.
+                            Queremos proporcionar um espaço que auxilie nos processos de cura e facilite o acesso a
+                            ajuda especializada.
+                        </p>
+                    </div>
+                    <div class="imagem">
+                        <img src="lazuli.jpg" alt="Equipe MindFlow">
+                    </div>
+                </div>
+            </main>
+
+        </div>
+       
+    </div>
+
+</body>
+
+</html>
+<!-- Adicione mais conteúdo se quiser testar o footer em páginas longas -->
+</main>
+</div>
+
+<footer class="footer">
+    <div class="footer-container">
+        <!-- Coluna 1 -->
+        <div class="footer-col">
+            <h3>Contatos de Emergência</h3>
+            <p>CVV: 188 (24h)</p>
+            <p>SAMU: 192</p>
+            <p>Bombeiros: 193</p>
+        </div>
+
+        <!-- Coluna 2 -->
+        <div class="footer-col">
+            <h3>Recursos</h3>
+            <a href="#">Central de Ajuda</a><br>
+            <a href="#">Termos de Uso</a><br>
+            <a href="#">Política de Privacidade</a>
+        </div>
+
+        <!-- Coluna 3 -->
+        <div class="footer-col">
+            <h3>MindFlow</h3>
+            <p>Plataforma dedicada ao cuidado e acompanhamento da saúde mental.</p>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        <p>© 2024 MindFlow. Todos os direitos reservados.</p>
+    </div>
+</footer>
+</div>
+
+<!-- Botão Flutuante do Chat -->
+  <button id="chat-toggle" class="chat-toggle">💬</button>
+
+  <!-- Janela do Chat -->
+  <div id="chat-window" class="chat-window hidden">
+    <div class="chat-header">
+      <h3>MindFlow IA</h3>
+      <button id="chat-close">✖</button>
+    </div>
+    <div id="chat-box" class="chat-box"></div>
+    <div class="chat-input-area">
+      <input type="text" id="user-input" placeholder="Digite sua mensagem..." />
+      <button id="send-btn">Enviar</button>
+    </div>
+  </div>
+
+  <script src="scripts.js"></script>
+  <script>
+    // ===== CHAT =====
+    document.addEventListener("DOMContentLoaded", () => {
+      const chatToggle = document.getElementById("chat-toggle");
+      const chatWindow = document.getElementById("chat-window");
+      const chatClose = document.getElementById("chat-close");
+      const sendBtn = document.getElementById("send-btn");
+      const userInput = document.getElementById("user-input");
+      const chatBox = document.getElementById("chat-box");
+
+      chatToggle.addEventListener("click", () => chatWindow.classList.toggle("hidden"));
+      chatClose.addEventListener("click", () => chatWindow.classList.add("hidden"));
+
+      async function sendMessage() {
+        const message = userInput.value.trim();
+        if (!message) return;
+
+        chatBox.innerHTML += `<div class="user-msg"><strong>Você:</strong> ${message}</div>`;
+        userInput.value = "";
+
+        try {
+          const res = await fetch("/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message })
+          });
+
+          if (!res.ok) {
+            const text = await res.text();
+            chatBox.innerHTML += `<div class="ai-msg"><strong>IA:</strong> Erro: ${text}</div>`;
+            return;
+          }
+
+          const data = await res.json();
+          const reply = data.reply || "Sem resposta.";
+          chatBox.innerHTML += `<div class="ai-msg"><strong>IA:</strong> ${reply}</div>`;
+          chatBox.scrollTop = chatBox.scrollHeight;
+
+        } catch (err) {
+          chatBox.innerHTML += `<div class="ai-msg"><strong>IA:</strong> Erro ao chamar a API.</div>`;
+          console.error(err);
+        }
+      }
+
+      sendBtn.addEventListener("click", sendMessage);
+      userInput.addEventListener("keypress", (e) => { if (e.key === "Enter") sendMessage(); });
+    });
+  </script>
+</body>
+</html>

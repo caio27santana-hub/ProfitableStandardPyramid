@@ -1,0 +1,60 @@
+label{
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold
+}
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: #f5eddc;
+  margin: 0;
+  height: 100vh;
+
+  /* Centralização */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.1);
+  width: 350px;
+  text-align: center;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+select, input, button {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  box-sizing: border-box; /* garante que padding + border não aumentem a largura */
+  height: 40px; /* define altura fixa para todos */
+}
+
+
+button {
+  background: #2f5aa8;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+  background: #006666;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+
+}
+
+.hidden {
+  display: none;
+}
