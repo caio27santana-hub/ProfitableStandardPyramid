@@ -1,3 +1,7 @@
+body {
+  background-color: #dbdbdb; /* cinza escuro */
+}
+
 /* DIARIO */
 /* Formulário e entradas */
 .container2,
@@ -23,7 +27,7 @@
   width: 100%;
   padding: 12px;
   margin: 12px 0;
-  border: 1px solid #ccc;
+  border: 1px solid #2f5aa8;
   border-radius: 10px;
   font-size: 14px;
   font-family: 'Montserrat', sans-serif;
@@ -49,7 +53,7 @@
 
 /* Botão salvar */
 .container2 button {
-  background: #4CAF50;
+  background: #2f5aa8;
   color: white;
   border: none;
   padding: 12px 18px;
@@ -61,7 +65,7 @@
 }
 
 .container2 button:hover {
-  background: #45a049;
+  background: #006766;
 }
 
 .entry {
@@ -192,7 +196,7 @@
 
 ##calendar {
   max-width: 900px;
-  background: #fff;
+  background: #545454;
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -413,4 +417,11 @@ main {
 /* Emoji dentro do botão */
 #botao-tema span {
   font-size: 18px;
+}
+#map {
+  width: 100%;
+  height: 400px; /* ajusta como quiser */
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  margin-bottom: 30px;
 }

@@ -1,63 +1,68 @@
 import express from "express";
 import fetch from "node-fetch";
+import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
-import cors from "cors";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-
-// ===== Middleware =====
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(__dirname));
 
-// ===== API KEY =====
+// 🔑 Configure sua chave Gemini nos Secrets do Replit
 const API_KEY = process.env.GEMINI_API_KEY;
-if (!API_KEY) {
-  console.error("⚠️ GEMINI_API_KEY não configurada nos Secrets do Replit!");
+if (!API_KEY) console.warn("⚠️ AVISO: GEMINI_API_KEY não configurada.");
+
+const GEMINI_URL =
+  `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${API_KEY}`;
+
+// Função auxiliar para chamar a API Gemini
+async function chamarGemini(mensagem) {
+  const prompt = `Você é um assistente de saúde mental empático e acolhedor. 
+Ajude o usuário com apoio emocional e orientações leves.
+Usuário: ${mensagem}`;
+
+  const resposta = await fetch(GEMINI_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      contents: [{ role: "user", parts: [{ text: prompt }] }],
+      generationConfig: {
+        maxOutputTokens: 256,
+        temperature: 0.7
+      }
+    })
+  });
+
+  if (!resposta.ok) {
+    const texto = await resposta.text();
+    throw new Error(`Erro Gemini: ${texto}`);
+  }
+
+  const data = await resposta.json();
+  return data.candidates?.[0]?.content?.parts?.[0]?.text || "⚠️ A IA não respondeu.";
 }
 
-// Endpoint do Google Gemini
-const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${API_KEY}`;
-
-// ===== Endpoint de Chat =====
+// Rota do chat
 app.post("/chat", async (req, res) => {
+  const { message } = req.body;
+  if (!message) return res.status(400).json({ error: "Mensagem vazia" });
+
   try {
-    const { message } = req.body;
-    if (!message) return res.status(400).json({ error: "message is required" });
-    if (!API_KEY) return res.status(500).json({ error: "GEMINI_API_KEY not configured" });
-
-    // Requisição para Gemini
-    const resp = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        instances: [{ content: message }],
-        parameters: { temperature: 0.7, maxOutputTokens: 300 }
-      })
-    });
-
-
-    if (!resp.ok) {
-      const text = await resp.text();
-      return res.status(resp.status).json({ reply: `Erro da API Gemini: ${text}` });
-    }
-
-    const data = await resp.json();
-    const aiText = data.candidates?.[0]?.content?.[0]?.text || "Sem resposta.";
-    res.json({ reply: aiText });
-
-  } catch (error) {
-    console.error("Erro /chat:", error);
-    res.status(500).json({ error: error.message });
+    const respostaIA = await chamarGemini(message);
+    res.json({ reply: respostaIA });
+  } catch (err) {
+    console.error("Erro no /chat:", err);
+    res.status(500).json({ error: "Erro no servidor: " + err.message });
   }
 });
 
-// ===== Servidor =====
+// Inicializa o servidor
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT} (PORT=${PORT})`);
+  console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
 });
+

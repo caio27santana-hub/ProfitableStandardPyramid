@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Página de Teste POST Canônico</title>
+</head>
+<body>
+    <h1>Teste de Requisição POST com URL Canônica</h1>
+    <button id="testButton">Testar POST</button>
+
+    <script>
+        document.getElementById('testButton').addEventListener('click', async () => {
+            console.log("Botão clicado. Enviando requisição POST...");
+            try {
+                // =================================================================
+                // AQUI ESTÁ A MUDANÇA PRINCIPAL
+                // Esta linha constrói a URL completa e inequívoca do servidor.
+                // VAI CONSTRUIR -> "https://[id-do-seu-repl].replit.dev/testepost"
+                const serverURL = `https://${window.location.hostname}/testepost`;
+                // =================================================================
+
+                console.log("Enviando requisição para a URL canônica:", serverURL);
+
+                // Usa a URL completa e explícita na requisição
+                const response = await fetch(serverURL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ data: "teste" })
+                });
+                
+                // Se a resposta não for OK (ex: 404, 500), joga um erro
+                if (!response.ok) {
+                    throw new Error(`Erro de Rede: ${response.status} - ${response.statusText}`);
+                }
+
+                const result = await response.json();
+                console.log("Resposta do servidor:", result);
+                alert("SUCESSO! A requisição POST foi recebida. Verifique o console.");
+
+            } catch (error) {
+                console.error("Erro no fetch:", error);
+                alert("FALHA! Verifique o console do navegador para detalhes do erro.");
+            }
+        });
+    </script>
+</body>
+</html>
