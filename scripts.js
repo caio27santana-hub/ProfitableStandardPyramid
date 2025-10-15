@@ -160,7 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (logoutBtn) {
     logoutBtn.addEventListener("click", function () {
       alert("Você será desconectado!");
-      window.location.href = "login.html";
+      window.location.href = "index.html";
     });
   }
 
@@ -234,12 +234,56 @@ document.addEventListener("DOMContentLoaded", () => {
   // ... TODO O SEU CÓDIGO ATUAL (modo escuro, calendário, diário, chat, etc)
 
   // ===== MAPA =====
-  function initMap() {
-    const local = { lat: -23.5505, lng: -46.6333 }; // SP como exemplo
-    const map = new google.maps.Map(document.getElementById("map"), {
-      zoom: 12,
-      center: local,
-    });
+    function initMap() {
+      const saoPaulo = { lat: -23.5505, lng: -46.6333 };
+      const map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 12,
+          center: saoPaulo,
+      });
+
+      // Para uma aplicação real, as buscas seriam feitas aqui.
+      // Como exemplo, usamos os dados pré-carregados abaixo.
+      const locais = [
+          // --- CAPS ---
+          { pos: { lat: -23.6760, lng: -46.6974 }, nome: "CAPS AD II Santo Amaro", tipo: 'caps' },
+          { pos: { lat: -23.6938, lng: -46.6572 }, nome: "CAPS Adulto II Cidade Ademar", tipo: 'caps' },
+          { pos: { lat: -23.6334, lng: -46.7099 }, nome: "CAPS ADULTO III LARGO 13", tipo: 'caps' },
+          { pos: { lat: -23.6826, lng: -46.6631 }, nome: "CAPS AD II CIDADE ADEMAR", tipo: 'caps' },
+
+          // --- Clínicas Psiquiátricas ---
+          { pos: { lat: -23.5857, lng: -46.6433 }, nome: "Clínica Spatium", tipo: 'clinica' },
+          { pos: { lat: -23.6067, lng: -46.6800 }, nome: "Dra. Lilian Bruza | Consultório Psiquiatria", tipo: 'clinica' },
+          { pos: { lat: -23.5413, lng: -46.5765 }, nome: "Espaço Humaniza Clínica de Psiquiatria", tipo: 'clinica' },
+
+          // --- Consultórios de Psicologia ---
+          { pos: { lat: -23.6666, lng: -46.6668 }, nome: "New Life Psicologia", tipo: 'consultorio' },
+          { pos: { lat: -23.6559, lng: -46.6787 }, nome: "Psicóloga Carla Olivastro", tipo: 'consultorio' },
+          { pos: { lat: -23.6644, lng: -46.6710 }, nome: "Gaude Psicologia", tipo: 'consultorio' }
+      ];
+
+      // --- Ícones Personalizados para Priorização ---
+      // Você pode criar ou baixar seus próprios ícones!
+      const icones = {
+        caps: {
+          url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png", // Ícone vermelho para CAPS
+        },
+        clinica: {
+          url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png", // Ícone azul para Clínicas
+        },
+        consultorio: {
+          url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png", // Ícone verde para Consultórios
+        }
+      };
+
+      // Adiciona um marcador para cada local da lista
+      locais.forEach((local) => {
+          new google.maps.Marker({
+              position: local.pos,
+              map: map,
+              title: local.nome,
+              icon: icones[local.tipo].url // Define o ícone com base no tipo
+          });
+      });
 
     // Pontos de exemplo
     const pontos = [
